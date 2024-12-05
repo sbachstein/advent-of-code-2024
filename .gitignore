@@ -1,3 +1,5 @@
 .idea
 target
 main
+input*.txt
+.env
