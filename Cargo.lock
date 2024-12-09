@@ -387,6 +387,36 @@ dependencies = [
 ]
 
 [[package]]
+name = "day-08"
+version = "0.0.0"
+dependencies = [
+ "criterion",
+ "dhat",
+ "divan",
+ "glam",
+ "itertools 0.12.1",
+ "miette",
+ "num-integer",
+ "thiserror",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "day-09"
+version = "0.0.0"
+dependencies = [
+ "criterion",
+ "dhat",
+ "divan",
+ "itertools 0.12.1",
+ "miette",
+ "thiserror",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "dhat"
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -700,6 +730,15 @@ checksum = "77a8165726e8236064dbb45459242600304b42a5ea24ee2948e18e023bf7ba84"
 dependencies = [
  "overload",
  "winapi",
+]
+
+[[package]]
+name = "num-integer"
+version = "0.1.46"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7969661fd2958a5cb096e56c8e1ad0444ac2bbcd0061bd28660485a44879858f"
+dependencies = [
+ "num-traits",
 ]
 
 [[package]]
