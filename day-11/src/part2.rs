@@ -1,5 +1,5 @@
-use cached::proc_macro::cached;
 use crate::custom_error::AocError;
+use cached::proc_macro::cached;
 
 #[cached]
 fn process_number(number: u64, times: u8) -> u64 {
@@ -22,9 +22,7 @@ fn process_number(number: u64, times: u8) -> u64 {
 }
 
 #[tracing::instrument]
-pub fn process(
-    _input: &str,
-) -> miette::Result<String, AocError> {
+pub fn process(_input: &str) -> miette::Result<String, AocError> {
     let numbers = _input
         .split_whitespace()
         .map(|s| s.parse().unwrap())
@@ -46,4 +44,3 @@ mod tests {
         Ok(())
     }
 }
-

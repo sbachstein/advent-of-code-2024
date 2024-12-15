@@ -15,20 +15,20 @@ fn process_number(n: &u64) -> Vec<u64> {
 }
 
 #[tracing::instrument]
-pub fn process(
-    _input: &str,
-) -> miette::Result<String, AocError> {
+pub fn process(_input: &str) -> miette::Result<String, AocError> {
     let mut numbers = _input
         .split_whitespace()
         .map(|s| s.parse().unwrap())
         .collect::<Vec<u64>>();
 
     for _ in 0..25 {
-        numbers = numbers.iter().flat_map(process_number).collect::<Vec<u64>>();
+        numbers = numbers
+            .iter()
+            .flat_map(process_number)
+            .collect::<Vec<u64>>();
     }
 
     Ok(numbers.len().to_string())
-
 }
 
 #[cfg(test)]

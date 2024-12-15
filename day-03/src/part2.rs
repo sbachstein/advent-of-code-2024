@@ -1,47 +1,49 @@
 use crate::custom_error::AocError;
+use nom::branch::alt;
 use nom::bytes::complete::tag;
 use nom::character::complete;
 use nom::character::complete::anychar;
 use nom::multi::{many0, many_till};
 use nom::sequence::{delimited, separated_pair};
 use nom::{IResult, Parser};
-use nom::branch::alt;
 
 fn parse(input: &str) -> IResult<&str, Vec<(Option<i32>, i32)>> {
     many0(
         many_till(
             anychar,
-            alt(
-                (
-                    delimited(tag("mul("), separated_pair(complete::i32, tag(","), complete::i32), tag(")"))
-                        .map(|(v1, v2)| (Some(v1), v2)),
-                    tag("do()")
-                        .map(|_| (None, 1)),
-                    tag("don't()")
-                        .map(|_| (None, 0))
+            alt((
+                delimited(
+                    tag("mul("),
+                    separated_pair(complete::i32, tag(","), complete::i32),
+                    tag(")"),
                 )
-            )
-        ).map(|(_disc, values)| values),
+                .map(|(v1, v2)| (Some(v1), v2)),
+                tag("do()").map(|_| (None, 1)),
+                tag("don't()").map(|_| (None, 0)),
+            )),
+        )
+        .map(|(_disc, values)| values),
     )(input)
 }
 
 #[tracing::instrument]
-pub fn process(
-    _input: &str,
-) -> miette::Result<String, AocError> {
+pub fn process(_input: &str) -> miette::Result<String, AocError> {
     let (_, numbers) = parse(_input).unwrap();
 
-    let res = numbers.iter().fold(
-        (0_i32, true),
-        |(sum, active), item| {
-            match item {
-                (None, 1) => (sum, true),
-                (None, 0) => (sum, false),
-                (Some(v1), v2) => if active {(sum + v1*v2, active)} else {(sum, active)},
-                _ => (sum, active)
+    let res = numbers
+        .iter()
+        .fold((0_i32, true), |(sum, active), item| match item {
+            (None, 1) => (sum, true),
+            (None, 0) => (sum, false),
+            (Some(v1), v2) => {
+                if active {
+                    (sum + v1 * v2, active)
+                } else {
+                    (sum, active)
+                }
             }
-        },
-    );
+            _ => (sum, active),
+        });
 
     Ok(res.0.to_string())
 }

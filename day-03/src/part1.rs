@@ -8,18 +8,27 @@ use nom::{IResult, Parser};
 
 fn parse(input: &str) -> IResult<&str, Vec<(i32, i32)>> {
     many0(
-        many_till(anychar, delimited(tag("mul("), separated_pair(complete::i32, tag(","), complete::i32), tag(")")))
-            .map(|(_disc, values)| values)
+        many_till(
+            anychar,
+            delimited(
+                tag("mul("),
+                separated_pair(complete::i32, tag(","), complete::i32),
+                tag(")"),
+            ),
+        )
+        .map(|(_disc, values)| values),
     )(input)
 }
 
 #[tracing::instrument]
-pub fn process(
-    _input: &str,
-) -> miette::Result<String, AocError> {
+pub fn process(_input: &str) -> miette::Result<String, AocError> {
     let (_, numbers) = parse(_input).unwrap();
 
-    Ok(numbers.iter().map(|(m1, m2)| m1*m2).sum::<i32>().to_string())
+    Ok(numbers
+        .iter()
+        .map(|(m1, m2)| m1 * m2)
+        .sum::<i32>()
+        .to_string())
 }
 
 #[cfg(test)]

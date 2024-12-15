@@ -12,39 +12,53 @@ struct PageOrdering {
 
 fn parse(input: &str) -> IResult<&str, PageOrdering> {
     separated_pair(
-        separated_list0(tag("\n"), separated_pair(complete::u32, tag("|"), complete::u32)),
+        separated_list0(
+            tag("\n"),
+            separated_pair(complete::u32, tag("|"), complete::u32),
+        ),
         tag("\n\n"),
         separated_list0(tag("\n"), separated_list0(tag(","), complete::u32)),
-    )(input).map(|(input, (order_rules, updates))| {
+    )(input)
+    .map(|(input, (order_rules, updates))| {
         (
             input,
-            PageOrdering{
+            PageOrdering {
                 order_rules,
-                updates
-            }
+                updates,
+            },
         )
     })
 }
 
 #[tracing::instrument]
-pub fn process(
-    _input: &str,
-) -> miette::Result<String, AocError> {
+pub fn process(_input: &str) -> miette::Result<String, AocError> {
     let (_, page_ordering) = parse(_input.trim()).unwrap();
 
-    let result = page_ordering.updates.iter().filter_map(|update| {
-        match page_ordering.order_rules.iter().map(|(predecessor, successor)| {
-            match (update.iter().position(|item| item == predecessor), update.iter().position(|item| item == successor)) {
-                (Some(p1), Some(p2)) if p1 < p2 => true,
-                (None, _) => true,
-                (_, None) => true,
-                _ => false
+    let result = page_ordering
+        .updates
+        .iter()
+        .filter_map(|update| {
+            match page_ordering
+                .order_rules
+                .iter()
+                .map(|(predecessor, successor)| {
+                    match (
+                        update.iter().position(|item| item == predecessor),
+                        update.iter().position(|item| item == successor),
+                    ) {
+                        (Some(p1), Some(p2)) if p1 < p2 => true,
+                        (None, _) => true,
+                        (_, None) => true,
+                        _ => false,
+                    }
+                })
+                .all(|valid| valid)
+            {
+                true => update.get((update.len() - 1) / 2),
+                false => None,
             }
-        }).all(|valid| valid) {
-            true => update.get((update.len() - 1) / 2),
-            false => None
-        }
-    }).sum::<u32>();
+        })
+        .sum::<u32>();
 
     Ok(result.to_string())
 }

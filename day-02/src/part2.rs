@@ -1,6 +1,5 @@
-use itertools::Itertools;
 use crate::custom_error::AocError;
-
+use itertools::Itertools;
 
 fn find_faulty_index(numbers: &[i32]) -> Option<usize> {
     let diffs = numbers
@@ -9,17 +8,18 @@ fn find_faulty_index(numbers: &[i32]) -> Option<usize> {
         .map(|(a, b)| b - a)
         .collect_vec();
 
-    let direction = diffs.iter()
-        .map(|diff| diff.signum()).counts()
+    let direction = diffs
+        .iter()
+        .map(|diff| diff.signum())
+        .counts()
         .into_iter()
         .max_by(|a, b| a.1.cmp(&b.1))
-        .map(|(k, _v)| k).unwrap();
+        .map(|(k, _v)| k)
+        .unwrap();
 
     diffs
         .iter()
-        .map(|diff| {
-            diff.signum() == direction && (1..=3).contains(&diff.abs())
-        })
+        .map(|diff| diff.signum() == direction && (1..=3).contains(&diff.abs()))
         .position(|good| !good)
 }
 fn is_report_safe(report: &str) -> bool {
@@ -27,7 +27,6 @@ fn is_report_safe(report: &str) -> bool {
         .split(' ')
         .map(|number| number.parse::<i32>().unwrap())
         .collect_vec();
-
 
     let bad_index = find_faulty_index(&numbers);
 
@@ -45,14 +44,10 @@ fn is_report_safe(report: &str) -> bool {
 }
 
 #[tracing::instrument]
-pub fn process(
-    _input: &str,
-) -> Result<String, AocError> {
+pub fn process(_input: &str) -> Result<String, AocError> {
     let res = _input
         .lines()
-        .map(
-            is_report_safe
-        )
+        .map(is_report_safe)
         .filter(|&safe| safe)
         .count();
 

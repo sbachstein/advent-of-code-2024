@@ -44,30 +44,37 @@ impl Equation {
 }
 
 fn parse(input: &str) -> IResult<&str, Vec<(u64, Vec<u64>)>> {
-    separated_list0(newline, separated_pair(complete::u64, tag(": "), separated_list0(tag(" "), complete::u64)))(input)
+    separated_list0(
+        newline,
+        separated_pair(
+            complete::u64,
+            tag(": "),
+            separated_list0(tag(" "), complete::u64),
+        ),
+    )(input)
 }
 
 #[tracing::instrument]
-pub fn process(
-    _input: &str,
-) -> miette::Result<String, AocError> {
+pub fn process(_input: &str) -> miette::Result<String, AocError> {
     let (_, parsed) = parse(_input).unwrap();
 
-    let equations = parsed.into_iter().map(|eq| {
-        Equation {
+    let equations = parsed
+        .into_iter()
+        .map(|eq| Equation {
             result: eq.0,
             operands: eq.1,
-        }
-    }).collect_vec();
+        })
+        .collect_vec();
 
     dbg!(&equations);
 
-    let result = equations.iter().filter_map(|eq| {
-        match eq.is_valid() {
+    let result = equations
+        .iter()
+        .filter_map(|eq| match eq.is_valid() {
             true => Some(eq.result),
             false => None,
-        }
-    }).sum::<u64>();
+        })
+        .sum::<u64>();
 
     Ok(result.to_string())
 }
