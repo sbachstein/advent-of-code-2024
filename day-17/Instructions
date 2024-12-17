@@ -1,0 +1,8 @@
+B = A MOD 8
+B = B XOR 7
+C = A >> B
+B = B XOR 7
+B = B XOR C
+A = A >> 3 = A / 8
+OUT B
+IF A != 0 GOTO START
