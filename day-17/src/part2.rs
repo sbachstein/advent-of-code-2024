@@ -47,7 +47,7 @@ fn retrieve_combo_operand_value(operator: &u8, registers: &Registers) -> Result<
     }
 }
 
-fn execute_program(program: &Program, a: u64) -> Result<Vec<u8>,AocError> {
+fn execute_program(program: &Program, a: u64) -> Result<Vec<u8>, AocError> {
     let mut registers = program.initial_registers.clone();
     let mut instruction_pointer: usize = 0;
     let mut output_buffer: Vec<u8> = Vec::new();
@@ -115,7 +115,8 @@ fn execute_program(program: &Program, a: u64) -> Result<Vec<u8>,AocError> {
 fn find_solution(a: u64, program: &Program) -> Option<u64> {
     let output = execute_program(&program, a).ok()?;
     let output_reversed: Vec<u8> = output.iter().copied().rev().collect();
-    let original_reversed_partial: Vec<u8> = program.instructions
+    let original_reversed_partial: Vec<u8> = program
+        .instructions
         .iter()
         .copied()
         .rev()
