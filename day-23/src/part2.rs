@@ -80,7 +80,7 @@ pub fn process(_input: &str) -> miette::Result<String, AocError> {
 
     let result = cliques
         .get(0)
-        .unwrap()
+        .ok_or(Error::other("No computers in the data"))?
         .iter()
         .map(|n| graph.node_weight(*n).unwrap().to_string())
         .sorted()
