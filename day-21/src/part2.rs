@@ -43,7 +43,7 @@ fn shortest_paths(
     levels: u8,
 ) -> usize {
     if levels == 0 {
-        return 1
+        return 1;
     }
 
     let start_coords = keymap.get(&from).unwrap();
@@ -91,7 +91,8 @@ fn shortest_paths(
                 .map(|(from, to)| shortest_paths(from, to, &DIRMAP, IVec2::new(0, 0), levels - 1))
                 .sum()
         })
-        .min().unwrap()
+        .min()
+        .unwrap()
 }
 
 #[tracing::instrument]
